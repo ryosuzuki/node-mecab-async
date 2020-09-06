@@ -8,6 +8,7 @@ var MeCab = function() {};
 MeCab.prototype = {
     command : 'mecab',
     options : {},
+    ipadic: null,
     parser: data => (data.length <= 8) ? null : {
         // Ref: http://mecab.googlecode.com/svn/trunk/mecab/doc/index.html
         // 表層形\t品詞,品詞細分類1,品詞細分類2,品詞細分類3,活用形,活用型,原形,読み,発音
@@ -32,6 +33,9 @@ MeCab.prototype = {
         return results;
     },
     _shellCommand : function(str) {
+        if (this.ipadic) {
+            this.command += ` -d ${this.ipadic}`
+        }
         return sq.quote(['echo', str]) + ' | ' + this.command;
     },
     _parseMeCabResult : function(result) {
